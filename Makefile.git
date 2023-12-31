@@ -21,11 +21,7 @@ togit	:
 push	:
 	   @ git push --tags origin $$BR:$$BR ;	
 
-BR	=							\
-	   $(shell						\
-			git branch |				\
-			sed -e '/^[^*]/d' -e 's/* //'		\
-		); 						\
+BR	=  $(shell git branch | sed -e '/^[^*]/d' -e 's/* //')
 #--------------------------------------------------------------------
 gitcheck:
 	   @ echo CURTAG=$(CURTAG)
