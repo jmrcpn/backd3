@@ -1,0 +1,50 @@
+#--------------------------------------------------------------------
+#to prepare git function
+#version change
+CURTAG	=	$(shell git rev-parse --abbrev-ref HEAD)
+VERSION	=	$(shell echo $(CURTAG) | cut -d'-' -f2)
+DELTA	=	$(shell echo $(CURTAG) | cut -d'-' -f3)
+UPD	=	$(shell git rev-list --count $(CURTAG) ^tag-$(VERSION)-$(DELTA))
+RELEASE	=	$(DELTA).$(UPD)
+
+#--------------------------------------------------------------------
+github	:  commit
+	   @ git push --tags $@
+
+commit	:  fclean togit
+	   @ git commit -a
+	   @ $(MAKE) -s push
+
+togit	:  
+	   @ git add .
+
+push	:
+	   @ (							\
+	     BR=$(shell						\
+			git branch |				\
+			sed -e '/^[^*]/d' -e 's/* //'		\
+		); 						\
+	     git push --tags origin $$BR:$$BR ;			\
+	     )
+	   @ $(MAKE) -s dovers
+#--------------------------------------------------------------------
+gitcheck:
+	   @ echo CURTAG=$(CURTAG)
+	   @ echo VERSION=$(VERSION)
+	   @ echo DELTA=$(DELTA)
+	   @ echo UPD=$(UPD)
+	   @ echo RELEASE=$(RELEASE)
+
+#--------------------------------------------------------------------
+#to clean directory before a git commit
+fclean	:  clean
+	   @ rm -fr core.*
+	   @ rm -fr srcrpm/*
+
+dovers	:  
+	   @ sed -i						\
+		-e '/^#define/s/RSION .*$$/RSION "$(VERSION)"/'	\
+		-e '/^#define/s/LEASE .*$$/LEASE "$(RELEASE)"/'	\
+		lib/subrou.c
+
+#--------------------------------------------------------------------
