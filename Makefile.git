@@ -9,7 +9,7 @@ RELEASE	=	$(DELTA).$(UPD)
 
 #--------------------------------------------------------------------
 github	:  
-	   @ git push --force --tags $@
+	   git push --tags $@ $(BR):$(BR)
 
 commit	:  fclean togit
 	   @ git commit -a
