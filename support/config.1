@@ -1,0 +1,25 @@
+#---------------------------------------------------------
+#fichier qui protege les fichiers de configuration chaque
+#nuit
+#---------------------------------------------------------
+frequency=22 * * sun-sat
+media=DDS
+kept=10
+#
+#---------------------------------------------------------
+#now you define all the include file for that backup
+#an include for each directory
+#
+included=/etc
+included=/rem/ottawa/etc
+included=/rem/paris/etc
+included=/rem/new-york/etc
+included=/rem/moscow/etc
+included=/rem/longueuil/etc
+#
+#---------------------------------------------------------
+#You can also define excluding patterns
+#
+excluded=*~
+excluded=*.o
+#

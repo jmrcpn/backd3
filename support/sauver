@@ -1,0 +1,19 @@
+#! /bin/sh
+#-----------------------------------------------
+REV="$Revision: 2.1.0.18 $"
+VERS=`echo $REV | cut -d' ' -f2 - `
+#-----------------------------------------------
+MSG="LOg on LOG_INFO instead of LOG_DEBUG"
+echo $MSG
+for i in $*
+  do
+  echo $i
+  if ! [ -f RCS/$i,v ]; then
+    ci -r2.1 -f -l -m"Creation" $i <<!EOT
+    Creation du fichier
+!EOT
+    ci -r$VERS -f -l -m"Mis a niveau" $i
+    fi
+  ci -f -l -m"$MSG" $i
+  done
+exit

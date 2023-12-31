@@ -1,0 +1,20 @@
+#---------------------------------------------------------
+#fichier qui protege les fichiers de source officielle
+#chaque samedi
+#---------------------------------------------------------
+frequency=20 * * sat,sun,mon
+media=DDS
+kept=21
+#
+#---------------------------------------------------------
+#now you define all the include file for that backup
+#an include for each directory
+#
+included=/usr/src/redhat/SOURCES
+#
+#---------------------------------------------------------
+#You can also define excluding patterns
+#
+excluded=*~
+excluded=*.o
+#

@@ -1,0 +1,19 @@
+#! /bin/sh
+#------------------------------------------------------------------
+#Shell to propely uninstall Regulus-2.1
+unset base
+export base=$PWD
+/bin/echo "WARNING!!! WARNING!!! WARNING!!!"
+/bin/echo "You have only 10 seconds to abort... starting NOW!"
+/bin/echo "To Abort type ^C"
+sleep 12
+#------------------------------------------------------------
+/bin/echo "Now Removing all "$base" directories and contents".
+chkconfig backd off
+/bin/echo "Current Regulus daemon starting level"
+chkconfig --list backd
+rm -fr /etc/rc.d/init.d/backd
+rm -fr $base/conf $base/data $base/bcklst
+#------------------------------------------------------------
+/bin/echo "Removing now all done".
+sleep 2

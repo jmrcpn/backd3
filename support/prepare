@@ -1,0 +1,39 @@
+#! /bin/sh
+#--------------------------------------------------------------------
+#Parameters list
+# $1 TOPRPM directory
+# $2 application name
+# $3 version numer
+# $4 release number
+#--------------------------------------------------------------------
+#reaching the main directory
+cd ..
+#--------------------------------------------------------------------
+#preparing the RPM file
+(
+TODUMP="Makefile.pkg Changes README \
+	app lib \
+	man shell \
+	support \
+	conf"
+
+rm -fr $2-$3
+mkdir $2-$3
+tar cf - $TODUMP | ( cd $2-$3 ; tar xf - )
+#--------------------------------------------------------------------
+#making the binary image for RPM
+#--------------------------------------------------------------------
+#cleaning sources
+(
+cd $2-$3
+mv Makefile.pkg Makefile
+find . -depth -type d -name "RCS" -exec rm -fr {} \;
+make -s clean
+date > $2-$3-$4.build_date
+)
+#--------------------------------------------------------------------
+/bin/echo "Making RPM TAR source file"
+tar zcf $1/SOURCES/$2-$3.tar.gz $2-$3
+rm -fr $2-$3
+)
+

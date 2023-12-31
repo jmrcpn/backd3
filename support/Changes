@@ -1,0 +1,169 @@
+#Log des mises a jour RCS
+#----------------------------------------------------------------
+$Log: Changes,v $
+Revision 2.1.0.18  2013/03/16 00:20:34  safe
+LOg on LOG_INFO instead of LOG_DEBUG
+
+Revision 2.1.0.17  2008/06/17 20:06:35  safe
+Compilation en mode X86_64
+
+Revision 2.1.0.16  2007/10/17 15:02:22  safe
+Ajustement du spc file pour %pre et %post
+
+Revision 2.1.0.15  2007/10/16 20:30:57  safe
+Ajustement dans la presentation du rapport de backup
+
+Revision 2.1.0.14  2007/10/16 18:58:13  safe
+Standardisation de la generation des RPM
+
+Revision 2.1.0.13  2007/10/16 15:21:07  safe
+Corrige le format du nombre de byte cummule dans le backup, on passe de 'unsigned long' a 'unsigned long long'
+
+Revision 2.1.0.12  2005/12/16 12:59:01  safe
+Ajustement pour corriger les manque de backup de temps a autres
+
+Revision 2.1.0.11  2005/12/13 18:34:49  safe
+Ajustement pour comprendre pourquoi le backup ne s'effecture de temps a autres
+
+Revision 2.1.0.10  2005/02/19 19:30:26  safe
+Ajustement pour le reveil de backd au moment du backup planifie
+
+Revision 2.1.0.9  2005/02/01 15:00:51  safe
+alignement version
+
+Revision 2.1.0.8  2005/02/01 14:59:34  safe
+Implementation sur delson
+
+Revision 2.1.0.8  2004/11/22 21:01:26  jmp
+Nouveau backed avec scheduler operationnel
+
+Revision 2.1.0.7  2004/11/22 20:43:06  jmp
+Ajustement sur le format de dump de la liste des tapes
+
+Revision 2.1.0.6  2004/11/22 20:21:57  jmp
+Test du codage avec scheduler
+
+Revision 2.1.0.5  2004/11/22 19:07:09  jmp
+Mise en place du concept de Scheduler
+
+Revision 2.1.0.4  2004/11/22 02:47:44  jmp
+Le stocke des donnees est fait sur le tape
+
+Revision 2.1.0.3  2004/11/22 01:13:30  jmp
+Le tape semble fonctionner
+
+Revision 2.1.0.2  2004/11/22 00:14:36  jmp
+Debug de fonctionnement du RPM
+
+Revision 2.1.0.1  2004/11/21 05:14:29  jmp
+Mise en palce d'une nouvelle version de backd
+
+Revision 2.1.0.0  2004/11/21 05:14:29  jmp
+Mis a niveau
+
+Revision 2.1  2004/11/21 05:14:29  jmp
+Creation
+
+Revision 2.0.0.27  2004/11/21 05:13:35  jmp
+annulation modifictaion tape precedent (etait deja existant), meilleur calcul de la valeur 'lastused' dans la liste des tapes
+
+Revision 2.0.0.26  2004/11/21 05:13:35  jmp
+Mis a niveau
+
+Revision 2.0  2004/11/21 05:13:35  jmp
+Creation
+
+Revision 2.0.0.26  2003/07/23 12:43:15  jmp
+annulation modifictaion tape precedent (etait deja existant), meilleur calcul de la valeur 'lastused' dans la liste des tapes
+
+Revision 2.0.0.25  2003/07/23 01:22:46  jmp
+Indique la date du tape precedent
+
+Revision 2.0.0.24  2003/05/24 18:01:46  jmp
+Traitement du signal SIGCHLD
+
+Revision 2.0.0.23  2002/01/06 18:15:03  jmp
+Insertion du numero de version dans subrou.c
+
+Revision 2.0.0.22  2001/07/30 15:00:35  jmp
+Meilleur choix des tapes
+
+Revision 2.0.0.21  2001/07/22 23:35:40  jmp
+Mise en place du programme de lecture
+
+Revision 2.0.0.20  2001/07/17 17:21:48  jmp
+Amelioration de la capacite de demarrage
+
+Revision 2.0.0.19  2001/07/16 21:25:13  jmp
+Ajustement dans le format de dump
+
+Revision 2.0.0.18  2001/07/16 18:55:00  jmp
+Nouvel ajustement dans le format de dump de bckinfo
+
+Revision 2.0.0.17  2001/07/16 17:52:09  jmp
+Ajustement dans le format de dump de bckinfo
+
+Revision 2.0.0.16  2001/07/16 12:35:41  jmp
+Correction generation sequence d'exclusion
+
+Revision 2.0.0.15  2001/07/16 02:06:06  jmp
+Gestion reelle du backup operationelle
+
+Revision 2.0.0.14  2001/07/15 20:38:35  jmp
+Procedure de backup complete
+
+Revision 2.0.0.13  2001/07/15 14:29:04  jmp
+Insertion des procedures shell
+
+Revision 2.0.0.12  2001/07/15 14:27:54  jmp
+Preparation backup operationnelle
+
+Revision 2.0.0.11  2001/07/10 01:58:19  jmp
+sequences CPIO tostore et tolist operationnelles
+
+Revision 2.0.0.10  2001/07/04 18:53:00  jmp
+Markage des tapes operationnel, debut de selection des tapes
+
+Revision 2.0.0.9  2001/07/03 21:22:48  jmp
+markage des tapes pratiquement fonctionnel
+
+Revision 2.0.0.8  2001/07/03 13:32:44  jmp
+Creation du tape operationnel
+
+Revision 2.0.0.7  2001/07/02 04:07:10  jmp
+La mise en place des contents et listing sur le tape est operationnelle
+
+Revision 2.0.0.6  2001/07/01 19:54:31  jmp
+Debut de la procedure de sauvegarde dans modbck
+
+Revision 2.0.0.5  2001/07/01 18:46:27  jmp
+mise en place de la procedure de dump dans modbck
+
+Revision 2.0.0.4  2001/07/01 15:49:40  jmp
+mise en place du module modbck.c
+
+Revision 2.0.0.3  2001/06/30 23:38:33  jmp
+Capacite d'ecrire par block de fichier sur le tape
+
+Revision 2.0.0.2  2001/06/30 18:19:24  jmp
+Mise en place de l'access a l'unite
+
+Revision 2.0.0.1  2001/06/30 14:42:28  jmp
+Creation d'une version de backup evolue
+
+Revision 2.0.0.0  2001/06/30 14:42:28  jmp
+Mis a niveau
+
+Revision 2.0  2001/06/30 14:42:28  jmp
+Creation
+
+Revision 2.0.0.2  2001/06/30 14:41:51  jmp
+Creation d'une version de backup evolue
+
+Revision 2.0.0.1  2001/06/30 14:41:51  jmp
+Mis a niveau
+
+Revision 2.0  2001/06/30 14:41:51  jmp
+Creation
+
+#----------------------------------------------------------------

@@ -1,0 +1,21 @@
+#this file describe the where you can use a tape type
+#-----------------------------------------------------------------
+#format:
+#TAPETYPE	TAPEDEVICE
+#	TAPETYPE	is the tape type (DDS, QIC, ZIP, etc...)
+#	TAPEDEVICE	is the physical device name which handle
+#			the media type (can have more than one,
+#			backd will drive more than one device at
+#			the same time)
+#-----------------------------------------------------------------
+#TapeType	TapeDevice	Blocksize
+#-----------------------------------------------------------------
+DDS		/dev/nst0	32768
+QIC		/dev/qtape	    0
+#-----------------------------------------------------------------
+#Floppy are used mainly for test purpose
+#-----------------------------------------------------------------
+FLOPPY		/dev/fd0	    0
+#FLOPPY		/dev/fd1	    0
+#
+#-----------------------------------------------------------------

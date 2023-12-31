@@ -1,0 +1,54 @@
+#!/bin/sh 
+#-------------------------------------------------------
+#Shell script to install backd
+# $base is the current installation directory 
+#----------------------------------------------------------
+export APPNAME=backd
+#----------------------------------------------------------
+#checking install configuration
+#----------------------------------------------------------
+#no predefined base, using current directory (RPM install)
+if [ ! -n "$base" ]; then
+  export base=$PWD	
+fi
+#------------------------------------------------------------------
+#----------------------------------------------------------
+#Preparing local configuration in conf.released
+#----------------------------------------------------------
+#----------------------------------------------------------
+#checking if it is a fresh install
+#----------------------------------------------------------
+if [ -d conf ] ; then
+  MODE="upgrade"
+  /bin/echo "You have a previously installed '$APPNAME' already"
+  /bin/echo "Keeping your previous configuration files"
+else
+  MODE="installation"
+  /bin/echo \
+"=============================================="
+  /bin/echo \
+"The '$APPNAME' $MODE is now in progress"
+  #--------------------------
+  #preparing conf directory
+  mkdir conf data bcklst
+  cp conf.released/{tapedev,tapelist,standard.sch} conf
+  cp conf.released/bckdlist.exp bcklst/demo
+  /bin/echo \
+"$APPNAME home directory current contents"
+  ls -ails
+  #--------------------------
+  #Everything done
+  /bin/echo \
+"=============================================="
+  /bin/echo \
+"The '$APPNAME' $MODE is now completed"
+  /bin/echo \
+"=============================================="
+#---------------------------------------------------------------------
+  if [ `id -u` = 0 ]; then        #standard RPM install
+  ln -s $base/shell/backd.sh /etc/rc.d/init.d/backd
+  chkconfig backd on
+  chkconfig --list backd
+  fi #if [`id -u` = 0 ]
+fi #if [ -d conf ]
+#---------------------------------------------------------------------

@@ -1,0 +1,22 @@
+#---------------------------------------------------------
+#fichier qui protege les fichiers des usagers chaque nuit
+#---------------------------------------------------------
+frequency=22 * * sun-sat
+media=DDS
+kept=10
+#
+#---------------------------------------------------------
+#now you define all the include file for that backup
+#an include for each directory
+#
+included=/home/safe
+included=/root
+#
+#---------------------------------------------------------
+#You can also define excluding patterns
+#
+excluded=/home/safe/tstsafe/*
+excluded=*.netscape/cache/*
+excluded=*~
+excluded=*.o
+#

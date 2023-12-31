@@ -1,0 +1,22 @@
+#---------------------------------------------------------
+#fichier qui protege les fichiers de configuration chaque
+#nuit
+#---------------------------------------------------------
+frequency=22 * * sun-sat
+media=DDS
+kept=10
+#
+#---------------------------------------------------------
+#now you define all the include file for that backup
+#an include for each directory
+#included=/archives
+included=/rem/paris/devhda2
+#
+#
+#---------------------------------------------------------
+#You can also define excluding patterns
+#
+excluded=/rem/paris/devhda2/safedata/safeweb/*
+excluded=*~
+excluded=*.o
+#

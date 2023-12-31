@@ -1,0 +1,23 @@
+#this file describe the tape liste available to backd for backup
+#purpose.
+#-------------------------------------------------------------------
+#format:
+#TAPEID	TYPE	SIZE	LASTUSED FROZEN
+#	TAPEID 		is free sequence (no space allowed)
+#	TYPE   		is free sequence (no space allowed)
+#	SIZE   		is numeric sequence, it is the tape size 
+#			expressed in megabytes
+#	LASTUSED	is a numeric date it is the last uses 
+#			date (SETTED by backd), keep it clear
+#			when you are defining tape
+#	FROZEN		The number of day the tape must be kept
+#			 (SETTED by backd), keep it clear
+#			when you are defining tape
+#-------------------------------------------------------------------
+#   TapeID Frmt   Size  lastused  frozen cycled curpid
+#-------------------------------------------------------------------
+#Tape effacer au cours du probleme de lecteur.
+  DDS-2180  DDS	  4096	20000827   00021    038	 00000
+  DDS-2181  DDS	  4096	20000904   00021    010	 00000
+  DDS-2182  DDS	  4096	20000917   00021    005  00000
+#-----------------------------------------------------------------
