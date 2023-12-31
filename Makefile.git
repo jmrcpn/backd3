@@ -11,7 +11,7 @@ RELEASE	=	$(DELTA).$(UPD)
 github	:  
 	   @ git push --tags $@ $(BR):$(BR)
 
-commit	:  fclean togit
+commit	:  fclean dovers togit
 	   @ git commit -a
 	   @ $(MAKE) -s push
 

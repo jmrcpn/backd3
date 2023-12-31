@@ -1,0 +1,93 @@
+#-----------------------------------------------------------
+#Fichier des definition des SPEC d'installation
+#-----------------------------------------------------------
+Name		:	backd3
+Summary		:	backd, a daemon busy protecting your knowledge
+Version		:	@@VERSION@@.@@RELEASE@@
+Release		:	00%{?dist}%{?orig}
+License		:	GPL
+Source		:	%{name}-%{version}.tar.gz
+URL		:	http://www.safe.ca/index.html
+Packager	:	Jean-Marc Pigeon <jmp@safe.ca>
+
+#-----------------------------------------------------------
+Requires	:	cpio
+Requires	:	cups-filter
+Requires	:	gunzip
+Requires	:	a2ps
+Requires	:	s-nail
+
+#-----------------------------------------------------------
+%description
+Backd is a small application, its purpose is to automaticaly
+take care of your backup, you just need to provide a
+set of tape and a set of directory to protect.
+you will receive a mail, stating the previous backup
+went ok and asking for the next tape.
+
+The latest backd released version is available from:
+ftp://ftp.safe.ca/pub/backd, the available versions are:
+backd-2.1-X.i386.rpm
+
+#-----------------------------------------------------------
+%files
+%defattr(-,root,daemon,-)
+%doc README
+%license COPYING
+%{_sysconfdir}/%{name}/
+%{_sysconfdir}/sysconfig/backd.conf
+%{_sysconfdir}/rc.d/init.d/backd
+%{_bindir}/%{name}
+%{_bindir}/backd-*
+%{_libdir}/%{name}/shell/sendmsg.sh
+
+#-----------------------------------------------------------
+%preun
+if [ "$1" = 0 ]; then
+  if [ -f /var/lock/subsys/%{name} ] ; then
+    %{_initrddir}/%{name} stop 2>/dev/null || :
+  fi
+  /sbin/chkconfig --del %{name} 2>/dev/null || :
+fi
+
+#-----------------------------------------------------------
+%postun
+if [ "$1" = 0 ]; then
+ /bin/echo "Post uninstall done" 2> /dev/null ||:
+fi
+
+#-----------------------------------------------------------
+%post
+if [ "$1" = 1 ]; then
+  /sbin/chkconfig --add %{name} 2>/dev/null || :
+  /sbin/chkconfig %{name} on 2>/dev/null || :
+  fi
+if [ "$1" = 2 ]; then
+  if [ -f /var/lock/subsys/%{name} ] ; then
+    %{_initrddir}/%{name} restart 2>/dev/null || :
+  fi
+fi
+
+#===========================================================
+%prep
+%setup -q
+
+#-----------------------------------------------------------
+%build
+%{__make} -s %{?_smp_mflags}
+
+#-----------------------------------------------------------
+%clean
+%{__rm} -rf %{buildroot}
+
+#-----------------------------------------------------------
+%install
+#main install
+%{__rm} -fr %{buildroot}
+
+%{__make}					\
+	DESTDIR=%{buildroot}			\
+	install					\
+
+#-----------------------------------------------------------
+%changelog
