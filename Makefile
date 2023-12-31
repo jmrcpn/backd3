@@ -1,6 +1,6 @@
 #--------------------------------------------------------------------
 #default make
-build	:  clean prod
+build	:  clean dovers prod
 #--------------------------------------------------------------------
 include	Makefile.git
 include	Makefile.rpm
