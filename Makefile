@@ -30,6 +30,7 @@ PARTEST	=							\
 	   -u /dev/tap1
 
 TSTPOOL	=							\
+	   TST-271828						\
 	   TST-355113						\
 	   TST-314159
 
@@ -76,9 +77,35 @@ notest	:
 	   @ rm -fr $(TESTDIR)
 	   @ rm dotest
 
+pool	:  debug
+	   @ mkdir -p $@/var/run/backd
+	   @ (							\
+	     for tape in $(TAPELIST);				\
+	       do						\
+	       dd						\
+			status=none				\
+			if=/dev/zero				\
+			of=pool/$$tape				\
+	       		bs=1M					\
+	       		count=$(DEVSIZE);			\
+	        ./bin/backd-marker				\
+	   		-d 0					\
+	   		-r pool					\
+			-u /$$tape				\
+	   		$$tape;					\
+	       done						\
+	     )
 #pseudo tape size in MegaBytes
-DEVSIZE	=  500
+DEVSIZE	=  5
 TESTDIR	=  ./test-area
+
+POOLDIR	=  pool
+TAPELIST=							\
+	   TST-355113						\
+	   TST-314159						\
+	   TST-271828						\
+	   TST-662607 
+
 #====================================================================
 
 #--------------------------------------------------------------------

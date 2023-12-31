@@ -50,8 +50,8 @@ while (proceed==true) {
 
       tapename=rou_apppath(device);
       if ((ready=fopen(tapename,"rw"))==(FILE *)0) {
-        (void) rou_alert(2,"%s Unable to open unit <%s> (error=<%s),OPEP",
-                            tapename,strerror(errno));
+        (void) rou_alert(2,"%s Unable to open unit <%s> (error=<%s)",
+                           OPEP,tapename,strerror(errno));
         phase=999;      //No need to go further
         }
       (void) free(tapename);
