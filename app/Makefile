@@ -39,15 +39,15 @@ LIBS	=  $(LIBBCK) -luuid
 #--------------------------------------------------------------------
 #Dependances
 #--------------------------------------------------------------------
-backd2	: toremake backd.o
+backd3 : toremake backd.o
 	  @ mkdir -p ../bin
-	  @ $(LD) $(LDFLAGS) -o ../bin/backd2 backd.o $(LIBS)
+	  @ $(LD) $(LDFLAGS) -o ../bin/$@ backd.o $(LIBS)
 
 backd								\
 marker								\
 reader								\
-	: backd2
-	  @ ln -nsf ./backd2 ../bin/backd-$@
+	: backd3
+	  @ ln -nsf ./backd3 ../bin/backd-$@
 
 backd.o:  backd.c						\
 	   ../lib/gestap.h					\
