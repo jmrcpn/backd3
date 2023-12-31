@@ -8,8 +8,8 @@ UPD	=	$(shell git rev-list --count $(CURTAG) ^tag-$(VERSION)-$(DELTA))
 RELEASE	=	$(DELTA).$(UPD)
 
 #--------------------------------------------------------------------
-github	:  commit
-	   @ git push --tags $@
+github	:  
+	   @ git push --force --tags $@
 
 commit	:  fclean togit
 	   @ git commit -a
@@ -19,14 +19,13 @@ togit	:
 	   @ git add .
 
 push	:
-	   @ (							\
-	     BR=$(shell						\
+	   @ git push --tags origin $$BR:$$BR ;	
+
+BR	=							\
+	   $(shell						\
 			git branch |				\
 			sed -e '/^[^*]/d' -e 's/* //'		\
 		); 						\
-	     git push --tags origin $$BR:$$BR ;			\
-	     )
-	   @ $(MAKE) -s dovers
 #--------------------------------------------------------------------
 gitcheck:
 	   @ echo CURTAG=$(CURTAG)

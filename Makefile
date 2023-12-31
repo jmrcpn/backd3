@@ -5,7 +5,7 @@ include	Makefile.git
 #--------------------------------------------------------------------
 prod								\
 debug								\
-	:  
+	:  dovers
 	   @ for i in $(SUBDIR) ;				\
 	       do						\
 	       $(MAKE) -s -C $$i $@ ;				\

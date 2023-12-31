@@ -19,7 +19,7 @@
 #include	"subrou.h"
 
 #define VERSION "3.1"
-#define RELEASE "0.1"
+#define RELEASE "0.2"
 
 #define APPLICATION             "backd"
 #define DIRLOCK                 "/var/run/"APPLICATION
