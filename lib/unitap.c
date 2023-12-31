@@ -128,13 +128,21 @@ while (proceed==true) {
     case 2      :       //do we have an header?
       int num;
       char *ptr;
-      char id[50];
-      char data[50];
+      char *data;
+      char id[20];
 
+      data=(char *)0;
       ptr=(char *)header;
-      while (sscanf(ptr,"%[^:]:%[^\n\r]\n%n",id,data,&num)==2) {
+      while (sscanf(ptr,"%"
+                        "sizeof(id)-1"
+                        "[^:]:"
+                        "%m"
+                        "[^\n\r]\n%n",id,&data,&num)==2) {
         ptr+=num;
-        if ((tape=dispatchid(tape,id,data))==(TAPTYP *)0) {
+        tape=dispatchid(tape,id,data);
+        (void) free(data);
+        data=(char *)0;
+        if (tape==(TAPTYP *)0) {
           phase=999;            //no need to go further
           break;
           }
