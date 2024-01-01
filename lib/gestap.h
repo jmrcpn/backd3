@@ -35,6 +35,9 @@ extern ETATYP tap_writeheader(TAPTYP *tape);
 //procedure to read a label on a tape device
 extern TAPTYP *tap_readheader(char *device,u_i64 blksize);
 
+//procedure to build a tape list from a file content
+extern TAPTYP **tap_readtapefile(const char *filename);
+
 //homework done by module before starting to use it
 int tap_opengestap();
 

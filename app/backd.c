@@ -52,6 +52,7 @@ const char *arg="b:d:hr:u:";
 //local parameters
 int status;
 TAPTYP *tape;
+TAPTYP **tapes;
 ARGTYP *params;
 uuid_t uuid;
 register int phase;
@@ -61,6 +62,7 @@ status=-1;
 (void) uuid_generate(uuid);
 verbose=true;
 tape=(TAPTYP *)0;
+tapes=(TAPTYP **)0;
 params=(ARGTYP *)0;
 phase=0;
 proceed=true;
@@ -77,9 +79,18 @@ while (proceed==true) {
       if ((tape=tap_newtap("none",uuid,params))==(TAPTYP *)0) {
 	(void) rou_alert(0,"%s Unable to assign tape structure (system Bug?)",
                             OPEP);
+	phase=999;	//not going further
         }
       break;
-    case 2	:	//everything right
+    case 2	:	//getting the current tape list
+      if ((tapes=tap_readtapefile((char *)0))==(TAPTYP **)0) {
+	(void) rou_alert(0,"%s Unable to get current tape liste (config missing?)",
+                            OPEP);
+        }
+      break;
+    case 3	:	//is the tape ID already existing?
+      break;
+    case 4	:	//everything right
       int i;
       ETATYP togo;
 

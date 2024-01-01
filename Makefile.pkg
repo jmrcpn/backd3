@@ -71,6 +71,10 @@ dotest	:
 	       	bs=1M						\
 	       	count=$(DEVSIZE)
 	   @ cp $(TESTDIR)/dev/tap1 $(TESTDIR)/dev/tap2
+	   @ mkdir -p $(TESTDIR)/{etc/sysconfig,/etc/backd}
+	   @ cp -a						\
+		conf/tapelist.sample				\
+		$(TESTDIR)/etc/backd/tapelist
 	   @ touch $@
 
 #destrpying the testarea

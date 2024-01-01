@@ -12,6 +12,8 @@
 #include	"subrou.h"
 #include	"gestap.h"
 
+#define TAPES   "/etc/backd/tapelist"
+
 static  int modopen;            //boolean module open/close
 /*
 ^L
@@ -275,7 +277,7 @@ while (proceed==true) {
   switch (phase) {
     case 0      :               //device ready
       if (device==(char *)0) {
-        (void) rou_alert(1,"tape device incomplete (bug?)",OPEP);
+        (void) rou_alert(1,"%s tape device incomplete (bug?)",OPEP);
         phase=999;              //no need to go further
         }
       break;
@@ -312,6 +314,63 @@ while (proceed==true) {
   }
 return tape;
 #undef  OPEP
+}
+/*
+^L
+*/
+/********************************************************/
+/*							*/
+/*      Procedure to build a tape list extracted from   */
+/*      file configuration list                         */
+/*							*/
+/********************************************************/
+TAPTYP **tap_readtapefile(const char *filename)
+
+{
+#define OPEP    "gestap.c:tap_readtapefile,"
+
+TAPTYP **taps;
+char *fname;
+FILE *fichier;
+int phase;
+int proceed;
+
+taps=(TAPTYP **)0;
+fname=(char *)0;
+fichier=(FILE *)0;
+phase=0;
+proceed=true;
+while (proceed==true) {
+  switch (phase) {
+    case 0      :               //building filename
+      if (filename==(char *)0)
+        filename=TAPES;
+      if ((fname=rou_apppath(filename))==(char *)0) {
+        (void) rou_alert(1,"%s Unable to get the tapelist filename (bug?)",OPEP);
+        phase=999;              //no need to go further
+        }
+      break;
+    case 1      :               //Is the file existing
+      if ((fichier=fopen(fname,"r"))==(FILE *)0) {
+        (void) rou_alert(0,"%s Unable to read tape list <%s> (error=<%s>)",
+                            OPEP,fname,strerror(errno));
+        phase=999;              //no need to go further
+        }
+      break;
+    case 2      :               //building list
+      (void) rou_alert(0,"%s JMPDBG file <%s> open",OPEP,fname);
+      break;
+    case 3      :               //closing file
+      (void) fclose(fichier);
+      (void) free(fname);
+      break;
+    default     :               //exiting
+      proceed=false;
+      break;
+    }
+  phase++;
+  }
+return taps;
 }
 /*
 ^L
