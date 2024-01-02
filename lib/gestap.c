@@ -76,6 +76,28 @@ return status;
 */
 /********************************************************/
 /*							*/
+/*      Procedure to scan a tapelist file keeping       */
+/*      comments and parsing tape description if needed */
+/*      return a tape structure                         */
+/*							*/
+/********************************************************/
+static LSTTYP *scanliste(FILE *fichier)
+
+{
+LSTTYP *liste;
+char line[3000];
+
+liste=(LSTTYP *)0;
+while (rou_getstr(fichier,line,sizeof(line)-1,true,'#')!=(char *)0) {
+  (void) rou_alert(0,"JMPDBG line=<%s>",line);
+  }
+return liste;
+}
+/*
+^L
+*/
+/********************************************************/
+/*							*/
 /*	procedure to initiat a clean tap structure.     */
 /*							*/
 /********************************************************/
@@ -324,18 +346,18 @@ return tape;
 /*      file configuration list                         */
 /*							*/
 /********************************************************/
-TAPTYP **tap_readtapefile(const char *filename)
+LSTTYP *tap_readtapefile(const char *filename)
 
 {
 #define OPEP    "gestap.c:tap_readtapefile,"
 
-TAPTYP **taps;
+LSTTYP *liste;
 char *fname;
 FILE *fichier;
 int phase;
 int proceed;
 
-taps=(TAPTYP **)0;
+liste=(LSTTYP *)0;
 fname=(char *)0;
 fichier=(FILE *)0;
 phase=0;
@@ -358,7 +380,7 @@ while (proceed==true) {
         }
       break;
     case 2      :               //building list
-      (void) rou_alert(0,"%s JMPDBG file <%s> open",OPEP,fname);
+      liste=scanliste(fichier);
       break;
     case 3      :               //closing file
       (void) fclose(fichier);
@@ -370,7 +392,7 @@ while (proceed==true) {
     }
   phase++;
   }
-return taps;
+return liste;
 }
 /*
 ^L
