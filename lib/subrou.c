@@ -19,7 +19,7 @@
 #include	"subrou.h"
 
 #define VERSION "3.1"
-#define RELEASE "0.14"
+#define RELEASE "0.15"
 
 #define APPLICATION             "backd"
 #define DIRLOCK                 "/var/run/"APPLICATION
@@ -88,8 +88,9 @@ if (entry!=(void *)0) {
     while (list[num]!=(void *)0) 
       num++;
     list=realloc((void *)list,(num+2)*sizeof(void *));
-    list[num]=entry;
     }
+  list[num]=entry;
+  list[num+1]=(void *)0;
   }
 return list;
 }
