@@ -48,6 +48,7 @@ vlmarker:  debug dotest
 	   @ valgrind 						\
 		-s						\
 		--leak-check=full				\
+		--track-origins=yes				\
 		./bin/backd-marker $(PARTEST)
 	   
 #to debug tape marker

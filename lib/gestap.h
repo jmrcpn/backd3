@@ -25,9 +25,12 @@ typedef enum    {
 
 //tapelist file  contents
 typedef struct  {
-      char *comment;            //plain line (including comment
       TAPTYP *tapedata;         //converted tape data (if needed)
+      char *comment;            //comment part of the line
       }LSTTYP;
+
+//init a tap structure
+extern LSTTYP *tap_freeentry(LSTTYP *entry);
 
 //init a tap structure
 extern TAPTYP *tap_newtap(char *label,uuid_t uuid,ARGTYP *params);
@@ -42,7 +45,7 @@ extern ETATYP tap_writeheader(TAPTYP *tape);
 extern TAPTYP *tap_readheader(char *device,u_i64 blksize);
 
 //procedure to build a tape list from a file content
-extern LSTTYP *tap_readtapefile(const char *filename);
+extern LSTTYP **tap_readtapefile(const char *filename);
 
 //homework done by module before starting to use it
 int tap_opengestap();

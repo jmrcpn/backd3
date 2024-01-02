@@ -11,7 +11,7 @@
 #include	<unistd.h>
 
 #include	"subrou.h"
-#include	"gestap.h"
+#include	"unipar.h"
 
 #define BLOCKSIZE       64536   //default tape block size
 

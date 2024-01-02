@@ -52,7 +52,7 @@ const char *arg="b:d:hr:u:";
 //local parameters
 int status;
 TAPTYP *tape;
-LSTTYP *liste;
+LSTTYP **list;
 ARGTYP *params;
 uuid_t uuid;
 register int phase;
@@ -62,7 +62,7 @@ status=-1;
 (void) uuid_generate(uuid);
 verbose=true;
 tape=(TAPTYP *)0;
-liste=(LSTTYP *)0;
+list=(LSTTYP **)0;
 params=(ARGTYP *)0;
 phase=0;
 proceed=true;
@@ -83,9 +83,10 @@ while (proceed==true) {
         }
       break;
     case 2	:	//getting the current tape list
-      if ((liste=tap_readtapefile((char *)0))==(LSTTYP *)0) {
+      if ((list=tap_readtapefile((char *)0))==(LSTTYP **)0) {
 	(void) rou_alert(0,"%s Unable to get current tape liste (config missing?)",
                             OPEP);
+	phase=999;	//not going further
         }
       break;
     case 3	:	//is the tape ID already existing?
@@ -125,6 +126,7 @@ while (proceed==true) {
 	  }
 	}
       tape=tap_freetape(tape);
+      list=(LSTTYP **)rou_freelist((void **)list,(freehandler_t)tap_freeentry);
       break;
     default	:	//exiting procedure
       proceed=false;

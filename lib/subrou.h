@@ -36,6 +36,13 @@ extern char  *rootdir;  //application root directory
 //to compute an application path with the root directory
 extern char *rou_apppath(const char *path);
 
+//to add a not null pointer to a list of pointer
+extern void **rou_addlist(void **list,void *entry);
+
+//to fee a list of pointer
+typedef void (*freehandler_t)(void *);
+extern void **rou_freelist(void **list,freehandler_t handler);
+
 //local system time (plus offset if needed for debug purpose)
 extern time_t rou_systime();
 

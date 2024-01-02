@@ -19,7 +19,7 @@
 #include	"subrou.h"
 
 #define VERSION "3.1"
-#define RELEASE "0.13"
+#define RELEASE "0.14"
 
 #define APPLICATION             "backd"
 #define DIRLOCK                 "/var/run/"APPLICATION
@@ -65,6 +65,60 @@ taille=snprintf(loc,sizeof(loc),"%s%s",root,path);
 newpath=(char *)calloc(taille+3,sizeof(char));
 (void) sprintf(newpath,"%s%s",root,path);
 return newpath;
+}
+/*
+
+*/
+/********************************************************/
+/*							*/
+/*	Subroutine to get add a pointer (not null)      */
+/*	to a list of pointer.                           */
+/*							*/
+/********************************************************/
+void **rou_addlist(void **list,void *entry)
+
+{
+if (entry!=(void *)0) {
+  int num;
+
+  num=0;
+  if (list==(void  **)0)
+    list=(void **)calloc(num+2,sizeof(void *));
+  else {
+    while (list[num]!=(void *)0) 
+      num++;
+    list=realloc((void *)list,(num+2)*sizeof(void *));
+    list[num]=entry;
+    }
+  }
+return list;
+}
+/*
+
+*/
+/********************************************************/
+/*							*/
+/*	Procedure to free memoy used by a list of       */
+/*      pointer.                                        */
+/*      Use a specific free procedure (according        */
+/*      upstream pointer type)                          */
+/*							*/
+/********************************************************/
+void **rou_freelist(void **list,freehandler_t handler)
+
+{
+if (list!=(void **)0) {
+  void **ptr;
+
+  ptr=list;
+  while ((*ptr)!=(void *)0) {
+    (void) handler(*ptr);
+    ptr++;
+    }
+  (void) free(list);
+  list=(void **)0;
+  }
+return list;
 }
 /*
 

@@ -72,6 +72,45 @@ return status;
 #undef  OPEP
 }
 /*
+
+*/
+/********************************************************/
+/*							*/
+/*	Subroutine to generate a tape definition entry  */
+/*							*/
+/********************************************************/
+static LSTTYP *gettapeinfo(char *str)
+
+{
+LSTTYP *entry;
+char *comment;
+u_long blocks;
+u_int lastused;
+u_int frozen;
+u_int cycled;
+u_int pidlock;
+char tapeid[300];
+char ttype[300];
+
+entry=(LSTTYP *)calloc(1,sizeof(LSTTYP));
+if ((comment=strchr(str,'#'))!=(char *)0) {
+  *comment='\000';
+  comment++;
+  }
+lastused=0;
+frozen=0;
+cycled=0;
+pidlock=0;
+if ((sscanf(str,"%s %s %ld %u %u %u %u",
+		 tapeid,ttype,&blocks,&lastused,&frozen,&cycled,&pidlock))>=3) {
+  entry->tapedata=(TAPTYP *)calloc(1,sizeof(TAPTYP));
+  (void) strncpy(entry->tapedata->id[0],tapeid,LABSIZE-1);
+  }
+if (comment!=(char *)0)
+  entry->comment=strdup(comment);
+return entry;
+}
+/*
 ^L
 */
 /********************************************************/
@@ -81,17 +120,42 @@ return status;
 /*      return a tape structure                         */
 /*							*/
 /********************************************************/
-static LSTTYP *scanliste(FILE *fichier)
+static LSTTYP **scanliste(FILE *fichier)
 
 {
-LSTTYP *liste;
+LSTTYP **list;
 char line[3000];
 
-liste=(LSTTYP *)0;
+list=(LSTTYP **)0;
 while (rou_getstr(fichier,line,sizeof(line)-1,true,'#')!=(char *)0) {
-  (void) rou_alert(0,"JMPDBG line=<%s>",line);
+  LSTTYP *entry;
+
+  if ((entry=gettapeinfo(line))!=(LSTTYP *)0) {
+    list=(LSTTYP **)rou_addlist((void **)list,(void *)entry);
+    }
   }
-return liste;
+return list;
+}
+/*
+^L
+*/
+/********************************************************/
+/*							*/
+/*      Procedure to free all memory used by one tape   */
+/*      list entry.                                     */
+/*							*/
+/********************************************************/
+LSTTYP *tap_freeentry(LSTTYP *entry)
+
+{
+if (entry!=(LSTTYP *)0) {
+  entry->tapedata=tap_freetape(entry->tapedata);
+  if (entry->comment!=(char *)0)
+    (void) free(entry->comment);
+  (void) free(entry);
+  entry=(LSTTYP *)0;
+  }
+return entry;
 }
 /*
 ^L
@@ -346,18 +410,18 @@ return tape;
 /*      file configuration list                         */
 /*							*/
 /********************************************************/
-LSTTYP *tap_readtapefile(const char *filename)
+LSTTYP **tap_readtapefile(const char *filename)
 
 {
 #define OPEP    "gestap.c:tap_readtapefile,"
 
-LSTTYP *liste;
+LSTTYP **list;
 char *fname;
 FILE *fichier;
 int phase;
 int proceed;
 
-liste=(LSTTYP *)0;
+list=(LSTTYP **)0;
 fname=(char *)0;
 fichier=(FILE *)0;
 phase=0;
@@ -380,7 +444,9 @@ while (proceed==true) {
         }
       break;
     case 2      :               //building list
-      liste=scanliste(fichier);
+      if ((list=scanliste(fichier))==(LSTTYP **)0)
+        (void) rou_alert(1,"%s Unable to scan tape list <%s> (config format?)",
+                            OPEP,fname);
       break;
     case 3      :               //closing file
       (void) fclose(fichier);
@@ -392,7 +458,7 @@ while (proceed==true) {
     }
   phase++;
   }
-return liste;
+return list;
 }
 /*
 ^L
