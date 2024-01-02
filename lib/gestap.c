@@ -76,7 +76,9 @@ return status;
 */
 /********************************************************/
 /*							*/
-/*	Subroutine to generate a tape definition entry  */
+/*	Subroutine to generate a tape definition entry, */
+/*      discriminate comment part from the datapart     */
+/*      within the line                                 */
 /*							*/
 /********************************************************/
 static LSTTYP *gettapeinfo(char *str)
@@ -142,6 +144,31 @@ if (entry!=(LSTTYP *)0) {
   entry=(LSTTYP *)0;
   }
 return entry;
+}
+/*
+^L
+*/
+/********************************************************/
+/*							*/
+/*      Procedure to add a tape definition to a         */
+/*      tapeliste.                                      */
+/*							*/
+/********************************************************/
+LSTTYP **tap_addtolist(LSTTYP **list,TAPTYP *tape)
+
+{
+if (tape!=(TAPTYP *)0) {
+  LSTTYP *toadd;
+  char comment[50];
+
+  toadd=(LSTTYP *)calloc(1,sizeof(LSTTYP));
+  (void) sprintf(comment,"# ADDED by JMPDBG");
+  toadd->comment=strdup(comment);
+  toadd->tapedata=(TAPTYP *)calloc(1,sizeof(TAPTYP));
+  (void) memcpy(toadd->tapedata,tape,sizeof(TAPTYP));
+  list=(LSTTYP **)rou_addlist((void **)list,(void *)toadd);
+  }
+return list;
 }
 /*
 ^L
