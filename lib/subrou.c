@@ -19,7 +19,7 @@
 #include	"subrou.h"
 
 #define VERSION "3.1"
-#define RELEASE "0.15"
+#define RELEASE "0.16"
 
 #define APPLICATION             "backd"
 #define DIRLOCK                 "/var/run/"APPLICATION
@@ -79,7 +79,7 @@ void **rou_addlist(void **list,void *entry)
 
 {
 if (entry!=(void *)0) {
-  int num;
+  register int num;
 
   num=0;
   if (list==(void  **)0)
@@ -90,7 +90,8 @@ if (entry!=(void *)0) {
     list=realloc((void *)list,(num+2)*sizeof(void *));
     }
   list[num]=entry;
-  list[num+1]=(void *)0;
+  num++;
+  list[num]=(void *)0;
   }
 return list;
 }

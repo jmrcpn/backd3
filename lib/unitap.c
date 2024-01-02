@@ -98,6 +98,83 @@ return data;
 */
 /********************************************************/
 /*							*/
+/*      Convert a tape structure to a string (to be used*/
+/*      within tapeliste).                              */
+/*							*/
+/********************************************************/
+char *tap_tapetostr(TAPTYP *tape)
+
+{
+char *line;
+
+line=(char *)0;
+if (tape!=(TAPTYP *)0) {
+  }
+return line;
+}
+/*
+^L
+*/
+/********************************************************/
+/*							*/
+/*      Convert a string (from tapeliste) to a tape     */
+/*      structure.                                      */
+/*							*/
+/********************************************************/
+TAPTYP *tap_strtotape(const char *data)
+
+{
+TAPTYP *tape;
+
+tape=(TAPTYP *)0;
+if (data!=(const char *)0) {
+  u_long blocks;
+  u_int lastused;
+  u_int frozen;
+  u_int cycled;
+  u_int pidlock;
+  char *id;
+  char *pool;
+
+  blocks=0;
+  lastused=0;
+  frozen=0;
+  cycled=0;
+  pidlock=0;
+  id=(char *)0;
+  pool=(char *)0;
+  if (sscanf(data,"%m[a-z,A-Z-,0-9]"    //tapeid
+                  " %m[a-z,A-Z-,0-9]"   //poolid
+                  " %ld"                //blocksize
+                  " %u"                 //lastused
+                  " %u"                 //frozen
+                  " %u"                 //cycled
+                  " %u"                 //pidlock
+                 ,&id,&pool,&blocks,      //minimal information
+                 &lastused,&frozen,&cycled,&pidlock)>=3) {
+    tape=(TAPTYP *)calloc(1,sizeof(TAPTYP));
+    if (id!=(char *)0) {
+      (void) strncpy(tape->id[0],id,sizeof(tape->id[0])-1);
+      (void) free(id);
+      }
+    if (pool!=(char *)0) {
+      (void) strncpy(tape->pool,pool,sizeof(tape->pool)-1);
+      (void) free(pool);
+      }
+    tape->blocks=blocks;
+    tape->lastused=lastused;
+    tape->frozen=frozen;
+    tape->cycled=cycled;
+    tape->pidlock=pidlock;
+    }
+  }
+return tape;
+}
+/*
+^L
+*/
+/********************************************************/
+/*							*/
 /*      Procedure to convert a tape header to a TAPTYP  */
 /*      structure.                                      */
 /*							*/
@@ -133,11 +210,9 @@ while (proceed==true) {
 
       data=(char *)0;
       ptr=(char *)header;
-      while (sscanf(ptr,"%"
-                        "sizeof(id)-1"
-                        "[^:]:"
-                        "%m"
-                        "[^\n\r]\n%n",id,&data,&num)==2) {
+      while (sscanf(ptr,"%" "sizeof(id)-1" "[^:]:"
+                        "%m[^\n\r]"
+                        "\n%n",id,&data,&num)==2) {
         ptr+=num;
         tape=dispatchid(tape,id,data);
         (void) free(data);

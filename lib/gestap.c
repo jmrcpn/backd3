@@ -83,29 +83,15 @@ static LSTTYP *gettapeinfo(char *str)
 
 {
 LSTTYP *entry;
-char *comment;
-u_long blocks;
-u_int lastused;
-u_int frozen;
-u_int cycled;
-u_int pidlock;
-char tapeid[300];
-char ttype[300];
+register char *comment;
 
 entry=(LSTTYP *)calloc(1,sizeof(LSTTYP));
 if ((comment=strchr(str,'#'))!=(char *)0) {
   *comment='\000';
   comment++;
   }
-lastused=0;
-frozen=0;
-cycled=0;
-pidlock=0;
-if ((sscanf(str,"%s %s %ld %u %u %u %u",
-		 tapeid,ttype,&blocks,&lastused,&frozen,&cycled,&pidlock))>=3) {
-  entry->tapedata=(TAPTYP *)calloc(1,sizeof(TAPTYP));
-  (void) strncpy(entry->tapedata->id[0],tapeid,LABSIZE-1);
-  }
+if (strlen(str)>0)
+  entry->tapedata=tap_strtotape(str);
 if (comment!=(char *)0)
   entry->comment=strdup(comment);
 return entry;

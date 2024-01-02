@@ -16,6 +16,7 @@
 //Tape header structure
 typedef struct  {
         char    id[3][LABSIZE]; //tape ID (current, previous, next)
+        char    pool[LABSIZE];  //tape pool id
         int     numrot;         //tape number of rotation (aging)
         time_t  stamp;          //backup stamp date
         time_t  tobkept;        //Backup retention date
@@ -24,17 +25,27 @@ typedef struct  {
         char    *device;        //device used by tape
         u_i64   blksize;        //tape blocksize (8 bytes)
         u_i64   lastblk;        //last position on the tape
-        u_i64   block;          //tape size in Mbytes
+        u_int   blocks;         //tape size in Mbytes
+        ulong   lastused;       //tape lastuse
+        u_int   frozen;         //how long the tape must kept
+        u_int   cycled;         //number of time tape was cycled
+        u_int   pidlock;        //Tape is lock by backd daemon
         }TAPTYP;
 
 //free memory used by a tap structure
 extern TAPTYP *tap_freetape(TAPTYP *data);
 
-//convert a tap structure to a header
-void *tap_tapetoheader(TAPTYP *data);
+//convert a tap structure to a string
+extern char *tap_tapetostr(TAPTYP *tape);
+
+//convert a string to a tape structure
+extern TAPTYP *tap_strtotape(const char *data);
 
 //convert a tap header string to a tape structure
 extern TAPTYP *tap_headertotape(void *header);
+
+//convert a tap structure to a header
+void *tap_tapetoheader(TAPTYP *data);
 
 //homework done by module before starting to use it
 int tap_openunitap();
