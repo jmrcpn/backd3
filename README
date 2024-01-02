@@ -70,7 +70,7 @@ Starting backd:
 
 components:
 
-	backd has 3 componets, the daemon itselft called
+	backd has 3 components, the daemon itselft called
 	backd, a tape marker to write a marker on the
 	tape itself, the reader to read a tape once
 	done by backd. See the manual for the different

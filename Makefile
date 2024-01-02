@@ -3,6 +3,6 @@
 build	:  clean dovers prod
 #--------------------------------------------------------------------
 include	Makefile.git
-include	Makefile.rpm
 include	Makefile.pkg
+include	Makefile.bld
 #--------------------------------------------------------------------

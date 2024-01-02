@@ -1,146 +1,74 @@
-#--------------------------------------------------------------------
-#default make
-default	:  clean prod
-#--------------------------------------------------------------------
-#Executable generation area
-#--------------------------------------------------------------------
-prod								\
-debug								\
-	:
-	   @ for i in $(SUBDIR) ;				\
-	       do						\
-	       $(MAKE) -s -C $$i $@ ;				\
-	       done
-
-clean	:
-	   @ for i in $(SUBDIR) ;				\
-	       do						\
-	       $(MAKE) -s -C $$i $@ ;				\
-	       done
-	   @ - rm -fr $(APPNAME)-*
-	   @ - rm -fr dotest $(TESTDIR)
-
-#--------------------------------------------------------------------
-#entry to test/simulate application
-#--------------------------------------------------------------------
-#test parameters
-PARTEST	=							\
-	   -d 0							\
-	   -r $(TESTDIR)					\
-	   TST-271828						\
-	   -u /dev/tap1						\
-
-TSTPOOL	=							\
-	   TST-271828						\
-	   TST-355113						\
-	   TST-314159
-
-#to test tape marker
-marker	:  debug dotest
-	   @ echo "starting backd-marker test"
-	   @ ./bin/backd-$@ $(PARTEST)
-	  
-#to test tape marker with valgrind 
-vlmarker:  debug dotest
-	   @ echo "backd-marker valgrind test"
-	   @ valgrind 						\
-		-s						\
-		--leak-check=full				\
-		./bin/backd-marker $(PARTEST)
-	   
-#to debug tape marker
-gdmarker: debug dotest
-	  @ gdb --args ./bin/backd-marker $(PARTEST)
-
-#--------------------------------------------------------------------
-#building testarea
-#--------------------------------------------------------------------
-#refresh test area from scratch
-newtest :  notest dotest
-
-#refresh test atrea from scratch
-newtest :  notest dotest
-
-#to create a test area
-dotest	:
-	   @ mkdir -p $(TESTDIR)/{dev,conf,var/run/backd}
-	   @ dd							\
-		status=none					\
-		if=/dev/zero					\
-		of=$(TESTDIR)/dev/tap1				\
-	       	bs=1M						\
-	       	count=$(DEVSIZE)
-	   @ cp $(TESTDIR)/dev/tap1 $(TESTDIR)/dev/tap2
-	   @ mkdir -p $(TESTDIR)/{etc/sysconfig,/etc/backd}
-	   @ cp -a						\
-		conf/tapelist.sample				\
-		$(TESTDIR)/etc/backd/tapelist
-	   @ touch $@
-
-#destrpying the testarea
-notest	:
-	   @ rm -fr $(TESTDIR)
-	   @ rm dotest
-
-pool	:  debug
-	   @ mkdir -p $@/var/run/backd
-	   @ (							\
-	     for tape in $(TAPELIST);				\
-	       do						\
-	       dd						\
-			status=none				\
-			if=/dev/zero				\
-			of=pool/$$tape				\
-	       		bs=1M					\
-	       		count=$(DEVSIZE);			\
-	        ./bin/backd-marker				\
-	   		-d 0					\
-	   		-r pool					\
-			-u /$$tape				\
-	   		$$tape;					\
-	       done						\
-	     )
-#pseudo tape size in MegaBytes
-DEVSIZE	=  5
-TESTDIR	=  ./test-area
-
-POOLDIR	=  pool
-TAPELIST=							\
-	   TST-355113						\
-	   TST-314159						\
-	   TST-271828						\
-	   TST-662607 
-
 #====================================================================
+#RPM area
+bingen	:  rpm
+	   @ rm -fr  ~/RPM/RPMS/`uname -m`/$(APPNAME)*
+	   @ rpmbuild						\
+		--rebuild					\
+		--quiet						\
+		--target `uname -m`				\
+		srcrpm/*.src.rpm
+	   @ echo $@ completed
+
+rpm	:  cleanrpm spec dovers
+	   @ $(MAKE) -s clean dotar
+	   @ mkdir -p $(RPMDIR)/SOURCES/
+	   @ mv -f $(APLR).tar.gz $(RPMDIR)/SOURCES/
+	   @ rpmbuild -bs					\
+		--quiet						\
+                --define "_source_filedigest_algorithm md5"	\
+                --define "_binary_filedigest_algorithm md5"	\
+		spec
+	   @ mkdir -p srcrpm
+	   @ rm -f srcrpm/*
+	   @ mv $(RPMDIR)/SRPMS/$(APLV)*.src.rpm srcrpm
+	   @ $(MAKE) -s cleanrpm
+	   @ echo $@ completed
+
+spec	:  backd3.spec.in
+	   @ sed                                                \
+                -e 's/@@VERSION@@/$(VERSION)/g'                 \
+                -e 's/@@RELEASE@@/$(RELEASE)/g'                 \
+                < $< > $@
+cleanrpm:
+	   @ rm -fr shell/version.sh spec
+	   @ rm -fr $(RPMDIR)/{SOURCES/*,RPMS,SRPMS}
 
 #--------------------------------------------------------------------
-#Installation procedure
-#--------------------------------------------------------------------
-install	:
-	   @ # preparing /var/lib/backd directory
-	   @ install -d $(DESTDIR)/usr
-	   @ cp -a bin $(DESTDIR)/usr
-	   @ install -d $(DESTDIR)/etc/$(APPNAME)
-	   @ install conf/{standard.sch,tapedev,tapelist,bckdlist.exp} \
-		     $(DESTDIR)/etc/$(APPNAME)
-	   @ install -d $(DESTDIR)/usr/lib/$(APPNAME)/shell
-	   @ install shell/sendmsg.sh $(DESTDIR)/usr/lib/$(APPNAME)/shell
-	   @ install -d $(DESTDIR)/etc/rc.d/init.d/
-	   @ cp -a shell/backd.sh $(DESTDIR)/etc/rc.d/init.d/backd
-	   @ install -d $(DESTDIR)/etc/sysconfig
-	   @ install conf/backd.conf $(DESTDIR)/etc/sysconfig/
-#--------------------------------------------------------------------
-#Equivalences
-#--------------------------------------------------------------------
-SUBDIR	= 								\
-	   lib								\
-	   app								\
-	   conf								\
-	   man								\
-	   shell							\
-	   support 
+#to generate RPM tar file
+dotar	:  dovers
+	   @ rm -fr $(APLR).tar.gz
+	   @ mkdir -p						\
+		$(APLR)/app					\
+		$(APLR)/conf					\
+		$(APLR)/lib					\
+		$(APLR)/man					\
+		$(APLR)/shell					\
+		$(APLR)/support
+	   @ #copying version, build_date and info file
+	   @ date > $(APLR)/$(APLR).build_date
+	   @ #adding application sources
+	   @ cp -a app/*.c $(APLR)/app
+	   @ cp -a conf/* $(APLR)/conf
+	   @ cp -a lib/{*.c,*.h} $(APLR)/lib
+	   @ cp -a man/* $(APLR)/man
+	   @ cp -a shell/* $(APLR)/shell
+	   @ cp -a support/* $(APLR)/support
+	   @ #adding construction file
+	   @ cp -a					\
+		Makefile.bld				\
+		$(APLR)/Makefile
+	   @ cp -a lib/Makefile $(APLR)/lib/Makefile
+	   @ cp -a app/Makefile $(APLR)/app/Makefile
+	   @ cp -a 					\
+		COPYING					\
+		README	 				\
+	   	$(APLR)
+	   @ tar zcf $(APLR).tar.gz $(APLR)
+	   @ rm -fr $(APLR)
+	   @ echo $(APLR).tar.gz ready
 
 #--------------------------------------------------------------------
-#definitions
-APPNAME	=  backd3
+#RPM directory
+RPMDIR	=	~/rpmbuild
+APLR	=	$(APPNAME)-$(VERSION).$(RELEASE)
 #--------------------------------------------------------------------
