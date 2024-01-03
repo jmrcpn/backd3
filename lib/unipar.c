@@ -100,15 +100,20 @@ int c;
 params=initparams();
 while (((c=getopt(argc,argv,optstring))!=EOF)&&(params!=(ARGTYP *)0)) {
   switch(c) {
-    case 'b'	:
+    case 'b'	:       //block size
       params->blksize=atoll(optarg);
       break;
-    case 'd'	:
+    case 'd'	:       //debug level
       debug=atoi(optarg);
       (void) rou_alert(1,"debug level is now '%d'",debug);
       break;
     case 'h'	:               //requestion program help
       params=par_freeparams(params);
+      break;
+    case 'p'	:       //pool name
+      if (params->pool!=(char *)0)
+        (void) free(params->pool);
+      params->pool=strdup(optarg);
       break;
     case 'r'	:
       if (rootdir!=(char *)0)
@@ -195,6 +200,7 @@ switch (called) {
 		          "[-b blocksize] "
 		          "[-d debug] "
 		          "[-h] "
+		          "[-p poolname] "
 		          "[-r root] "
 			  "-u unit "
 			  "tapename\n",

@@ -30,6 +30,7 @@ PARTEST	=							\
 	   -b 32768						\
 	   -d 0							\
 	   -r $(TESTDIR)					\
+	   -p POOL-X						\
 	   TST-271828						\
 	   TST-355113						\
 	   -u /dev/tap1						\

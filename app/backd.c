@@ -49,7 +49,7 @@ int marker(int argc,char *argv[])
 #define TLLOCK "tapelist_lock"
 
 //acceptable argument list
-const char *arg="b:d:hr:u:";	
+const char *arg="b:d:hp:r:u:";	
 
 //local parameters
 int status;
