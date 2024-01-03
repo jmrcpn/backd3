@@ -192,7 +192,7 @@ return tape;
 TAPTYP *tap_headertotape(void *header)
 
 {
-#define OPEP    "unitape.c:tap_strtotape,"
+#define OPEP    "unitape.c:tap_headertotape,"
 
 TAPTYP *tape;
 int phase;
@@ -220,9 +220,9 @@ while (proceed==true) {
 
       data=(char *)0;
       ptr=(char *)header;
-      while (sscanf(ptr,"%" "sizeof(id)-1" "[^:]:"
-                        "%m[^\n\r]"
-                        "\n%n",id,&data,&num)==2) {
+      while (sscanf(ptr,"%[a-z,A-Z]:"
+                        "%m[a-z-,A-Z,0-9]\n"
+                        "%n",id,&data,&num)==2) {
         ptr+=num;
         tape=dispatchid(tape,id,data);
         (void) free(data);

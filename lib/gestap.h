@@ -32,6 +32,9 @@ typedef struct  {
 //init a tap structure
 extern LSTTYP *tap_freeentry(LSTTYP *entry);
 
+//lock/unlock tapelist acces
+extern int tap_locktapelist(const char *filename,int lock,int tentative);
+
 //procedure to add a tape entry within the tapeliste
 extern LSTTYP **tap_addtolist(LSTTYP **list,TAPTYP *tape);
 

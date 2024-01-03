@@ -150,6 +150,22 @@ return entry;
 */
 /********************************************************/
 /*							*/
+/*      Procedure to lock exclusive access to tape list.*/
+/*      return lock status.                             */
+/*							*/
+/********************************************************/
+int tap_locktapelist(const char *filename,int lock,int tentative)
+
+{
+if (filename==(char *)0) 
+  filename=TAPES"_lock";
+return rou_locking(filename,lock,tentative);
+}
+/*
+^L
+*/
+/********************************************************/
+/*							*/
 /*      Procedure to add a tape definition to a         */
 /*      tapeliste.                                      */
 /*							*/
@@ -231,11 +247,8 @@ while (proceed==true) {
     case 2      :               //is current tape with the same uuid
       TAPTYP *oldtape;
 
-      oldtape=(tap_readheader(tape->device,tape->blksize));
+      oldtape=tap_readheader(tape->device,tape->blksize);
       if ((oldtape!=(TAPTYP *)0)&&(strcmp(oldtape->uuid,tape->uuid)==0)) {
-        (void) rou_alert(0,"Previous Tape with id/uuid <%s/%s>\n"
-                           "is still online on device <%s>",
-                           oldtape->id[0],tape->uuid,tape->device);
         status=tap_wronguuid;
         phase=999;              //no need to further
         }
@@ -249,7 +262,7 @@ while (proceed==true) {
         phase=999;              //no need to further
         }
       break;
-    case 4      :               //writing|updating the tape driver
+    case 4      :               //writing|updating the tape device
       status=tap_writeheader(tape);
       (void) rou_locking(lockname,LCK_UNLOCK,1);
       break;

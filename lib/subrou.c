@@ -19,7 +19,7 @@
 #include	"subrou.h"
 
 #define VERSION "3.1"
-#define RELEASE "0.19"
+#define RELEASE "0.20"
 
 #define APPLICATION             "backd"
 #define DIRLOCK                 "/var/run/"APPLICATION
@@ -497,10 +497,15 @@ while (proceed==true) {
         }
       break;
     case 1	:	//setting lock filename
+      const char *fname;
       char *name;
 
-      name=(char *)calloc(sizeof(DIRLOCK)+strlen(lockname)+10,sizeof(char));
-      (void) sprintf(name,"%s/%s.lock",DIRLOCK,lockname);
+      if ((fname=strrchr(lockname,'/'))==(char *)0)
+        fname=lockname;
+      else
+        fname++; 
+      name=(char *)calloc(sizeof(DIRLOCK)+strlen(fname)+10,sizeof(char));
+      (void) sprintf(name,"%s/%s.lock",DIRLOCK,fname);
       fullname=rou_apppath(name);
       (void) free(name);
       break;
@@ -574,7 +579,6 @@ while (proceed==true) {
 if (fullname!=(char *)0)
   (void) free(fullname);
 return done;
-#undef  LOCKNAM
 #undef	OPEP
 }
 /*

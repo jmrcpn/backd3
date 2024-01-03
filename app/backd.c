@@ -46,6 +46,8 @@ int marker(int argc,char *argv[])
 {
 #define OPEP    "backd.c:marker,"
 
+#define TLLOCK "tapelist_lock"
+
 //acceptable argument list
 const char *arg="b:d:hr:u:";	
 
@@ -75,36 +77,44 @@ while (proceed==true) {
 	phase=999;	//not going further
         }
       break;
-    case 1	:	//Preparing tape structure
+    case 1	:	//locking the tapelist access
+      if (tap_locktapelist((char *)0,true,5)==false) {
+	(void) rou_alert(0,"%s Unable to lock access to tapelist (busy?)", 
+                            OPEP);
+	phase=999;	//not going further
+        }
+      break;
+    case 2	:	//Preparing tape structure
       if ((tape=tap_newtap("none",uuid,params))==(TAPTYP *)0) {
 	(void) rou_alert(0,"%s Unable to assign tape structure (system Bug?)",
                             OPEP);
 	phase=999;	//not going further
         }
       break;
-    case 2	:	//getting the current tape list
+    case 3	:	//getting the current tape list
       if ((list=tap_readtapefile((char *)0))==(LSTTYP **)0) {
 	(void) rou_alert(0,"%s Unable to get current tape liste (config missing?)",
                             OPEP);
 	phase=999;	//not going further
         }
       break;
-    case 3	:	//is the tape ID already existing?
+    case 4	:	//is the tape ID already existing?
       break;
-    case 4	:	//everything right
+    case 5	:	//everything right
       int i;
       ETATYP togo;
 
       status=0;
       for (i=0;(i<params->argc)&&(status==0);i++) {
         (void) strncpy(tape->id[0],params->argv[i],sizeof(tape->id[0])-1);
+        (void) fprintf(stdout,"Tapeid <%s> to be written on tape\n",tape->id[0]);
 	togo=tap_initheader(tape);
         switch(togo) {
           case tap_ok           :       //everything fine, lets continue
             list=tap_addtolist(list,tape);
             (void) tap_writetapefile((const char *)0,list);
-            (void) rou_alert(0,"Unit <%s> set with label <%s>",
-                                params->device,tape->id[0]);
+            (void) fprintf(stdout,"Unit <%s> is now set with label <%s>\n",
+                                   params->device,tape->id[0]);
             break;
           case tap_nodevice     :       //device missing
             status=-1;
@@ -113,9 +123,12 @@ while (proceed==true) {
             char goahead;
 
             goahead=' ';
-            (void) fprintf(stdout,"Please change tape on Unit <%s> "
-                                  "and press enter (CTRL-C to abort)\n",
-                                  params->device);
+            (void) fprintf(stdout,"\n"
+                                  "Previous Tape with id/uuid <%s/%s>\n"
+                                  "is still online in device <%s>\n",
+                                  params->argv[i-1],tape->uuid,tape->device);
+            (void) fprintf(stdout,"Change tape in device!\n"
+                                  "Press enter when done (CTRL-C to abort)\n");
             while (goahead!='\n') 
               goahead=fgetc(stdin);       
             i--;                        //looping on same tape
@@ -131,6 +144,7 @@ while (proceed==true) {
       list=(LSTTYP **)rou_freelist((void **)list,(freehandler_t)tap_freeentry);
       break;
     default	:	//exiting procedure
+      (void) tap_locktapelist((char *)0,false,1);
       proceed=false;
       break;
     }
