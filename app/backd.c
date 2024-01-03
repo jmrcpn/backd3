@@ -101,6 +101,7 @@ while (proceed==true) {
 	togo=tap_initheader(tape);
         switch(togo) {
           case tap_ok           :       //everything fine, lets continue
+            (void) tap_writetapefile((const char *)0,list);
             (void) rou_alert(0,"Unit <%s> set with label <%s>",
                                 params->device,tape->id[0]);
             break;

@@ -109,6 +109,18 @@ char *line;
 
 line=(char *)0;
 if (tape!=(TAPTYP *)0) {
+  char data[300];
+
+  (void) snprintf(data,sizeof(data)-5,"%-16s%-7s"
+                                      "% 5d% 12ld% 13d% 6d% 10d",
+                                      tape->id[0],
+                                      tape->pool,
+                                      tape->blocks,
+                                      tape->lastused,
+                                      tape->frozen,
+                                      tape->cycled,
+                                      tape->pidlock);
+  line=strdup(data);
   }
 return line;
 }
@@ -244,7 +256,7 @@ return tape;
 void *tap_tapetoheader(TAPTYP *tape)
 
 {
-#define OPEP    "unitap.c:tapetostr,"
+#define OPEP    "unitap.c:tapetoheader,"
 
 void *zone;
 int phase;

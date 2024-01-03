@@ -472,6 +472,100 @@ while (proceed==true) {
   phase++;
   }
 return list;
+#undef  OPEP
+}
+/*
+^L
+*/
+/********************************************************/
+/*							*/
+/*      Procedure to write of update a tapelist file    */
+/*      with list of tape contents                      */
+/*							*/
+/********************************************************/
+int tap_writetapefile(const char *filename,LSTTYP **list)
+
+{
+#define OPEP    "gestap.c:tap_witetapefile,"
+
+int status;
+char *fname;
+FILE *fichier;
+int phase;
+int proceed;
+
+status=-1;
+phase=0;
+proceed=true;
+while (proceed==true) {
+  switch (phase) {
+    case 0      :               //building filename
+      if (filename==(char *)0)
+        filename=TAPES;
+      if ((fname=rou_apppath(filename))==(char *)0) {
+        (void) rou_alert(1,"%s Unable to get the tapelist filename (bug?)",OPEP);
+        phase=999;              //no need to go further
+        }
+      break;
+    case 1      :               //removing previous list
+      if (fname!=(char *)0) {   //always
+        char *old;
+
+        old=(char *)calloc(strlen(fname)+10,sizeof(char));
+        (void) strcat(old,fname);
+        (void) strcat(old,".prv");
+        (void) unlink(old);     //remove previous tapelist
+        if (link(fname,old)<0) {
+          (void) rou_alert(0,"%s Unable to link file <%s> and <%s> "
+                             "(bug?, error=<%s>)",
+                              OPEP,fname,old,strerror(errno));
+          phase=999;            //no need to go further
+          }
+        else
+          (void) unlink(fname);
+        (void) free(old);
+        }
+      break;
+    case 2      :               //opening the file in writing mode
+      if ((fichier=fopen(fname,"w"))<0) {
+        (void) rou_alert(0,"%s Unable to open file <%s> (error=<%s>)",
+                              OPEP,fname,strerror(errno));
+        phase=999;              //no need to go further
+        }
+      break;
+    case 3      :               //dumping the list content on file
+      if (list!=(LSTTYP **)0) {
+        register int num;
+
+        num=0;
+        while (list[num]!=(LSTTYP *)0) {
+          char *data;
+
+          if ((data=tap_tapetostr(list[num]->tapedata))!=(char *)0) {
+            (void) fprintf(fichier,"%s\t",data);
+            (void) free(data);
+            }
+          if (list[num]->comment!=(char *)0) 
+            (void) fprintf(fichier,"#%s",list[num]->comment);
+          (void) fprintf(fichier,"\n");
+          num++;
+          }
+        }
+      break;
+    case 4      :               //closing opened tapelist file
+      (void) fclose(fichier);
+      status=0;
+      break;
+    default     :
+      if (fname!=(char *)0)
+        (void) free(fname);
+      proceed=false;
+      break;
+    }
+  phase++;
+  }
+return status;
+#undef  OPEP
 }
 /*
 ^L

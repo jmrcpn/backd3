@@ -50,6 +50,10 @@ extern TAPTYP *tap_readheader(char *device,u_i64 blksize);
 //procedure to build a tape list from a file content
 extern LSTTYP **tap_readtapefile(const char *filename);
 
+//procedure to write/update a tapelist file from
+//liste of tape entries
+extern int tap_writetapefile(const char *filename,LSTTYP **list);
+
 //homework done by module before starting to use it
 int tap_opengestap();
 
