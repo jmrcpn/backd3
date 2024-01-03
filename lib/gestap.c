@@ -178,7 +178,7 @@ if (tape!=(TAPTYP *)0) {
   char comment[50];
 
   toadd=(LSTTYP *)calloc(1,sizeof(LSTTYP));
-  (void) sprintf(comment,"ADDED by JMPDBG");
+  (void) sprintf(comment,"Stamped date=%s",rou_getstrfulldate(time((time_t *)0)));
   toadd->comment=strdup(comment);
   toadd->tapedata=(TAPTYP *)calloc(1,sizeof(TAPTYP));
   (void) memcpy(toadd->tapedata,tape,sizeof(TAPTYP));

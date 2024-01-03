@@ -19,7 +19,7 @@
 #include	"subrou.h"
 
 #define VERSION "3.1"
-#define RELEASE "0.20"
+#define RELEASE "0.21"
 
 #define APPLICATION             "backd"
 #define DIRLOCK                 "/var/run/"APPLICATION
@@ -218,7 +218,7 @@ struct tm *ttime;
 (void) strcpy(timeloc,"");
 ttime=localtime(&curtime);
 (void) snprintf(timeloc,sizeof(timeloc),
-                        "%4d/%02d/%02d-%2d:%02d:%02d",
+                        "%4d/%02d/%02d-%02d:%02d:%02d",
                         ttime->tm_year+1900,ttime->tm_mon+1,ttime->tm_mday,
 			ttime->tm_hour,ttime->tm_min,ttime->tm_sec);
 return timeloc;
