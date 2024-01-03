@@ -1,0 +1,40 @@
+#-----------------------------------------------------------------------------
+#this file describe the tape liste available to backd for backup
+#purpose.
+#-----------------------------------------------------------------------------
+#format:
+#TAPEID	TYPE	SIZE	LASTUSED FROZEN
+#	TAPEID 		is free sequence (no space allowed)
+#	TYPE   		is free sequence (no space allowed)
+#	SIZE   		is numeric sequence, it is the tape size in
+#			megabytes
+#	LASTUSED	is a numeric date it is the last uses 
+#			date (SETTED by backd), keep it clear
+#			when you are defining tape
+#	FROZEN		The number of day the tape must be kept
+#			 (SETTED by backd), keep it clear
+#			when you are defining tape
+#	CYCLED		The number of time that media was used
+#			(incremented by backd)
+#	CURPID		Used by backd to now which sub-daemon
+#			had lock the tape.
+#-----------------------------------------------------------------------------
+#TapeID		Frmt	Size	lastused	frozen	cycled	curpid
+#-----------------------------------------------------------------------------
+#DDS-2193	DDS	8192	19981021	00001	016	04730	# 
+#DDS-2194	DDS	8192	00000000	00000	000	00000
+#DDS-2195	DDS	8192	00000000	00000	000	00000
+#DDS-2196	DDS	8192	00000000	00000	000	00000
+#DDS-2197	DDS	8192	00000000	00000	000	00000
+#DDS-2198	DDS	8192	00000000	00000	000	00000
+#DDS-2199	DDS	8192	00000000	00000	000	00000
+#-----------------------------------------------------------------------------
+FD-01           FLOPPY      1           0            0     0         0	
+FD-02           FLOPPY      1           0            0     0         0	
+FD-03           FLOPPY      1           0            0     0         0	
+FD-04           FLOPPY      1           0            0     0         0	
+FD-05           FLOPPY      1           0            0     0         0	
+DDS2193         DDS      8192    19981021            1    16      4730	# 
+dds0001         DDS      8192    19981021            1    16      4730	# 
+#-----------------------------------------------------------------------------
+TST-271828      POOL    64536           0            0     0         0	#Label Stamp: 2024/01/03-11:22:36

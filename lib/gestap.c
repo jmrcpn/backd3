@@ -584,6 +584,35 @@ return status;
 ^L
 */
 /********************************************************/
+/*							*/
+/*      Procedure to return a tape reference extracted  */
+/*      from a list of tape reference, selection is done*/
+/*      according tape label.                           */
+/*							*/
+/********************************************************/
+const TAPTYP *tap_findtape(LSTTYP **list,const char *label)
+
+{
+const TAPTYP *tape;
+
+tape=(const TAPTYP *)0;
+if ((list!=(LSTTYP **)0)&&(label!=(const char *)0)) {
+  while (*list!=(LSTTYP *)0) {
+    if ((*list)->tapedata!=(TAPTYP *)0) {
+      if (strcmp((*list)->tapedata->id[0],label)==0) {
+        tape=(*list)->tapedata;
+        break;
+        }
+      }
+    list++;
+    }
+  }
+return tape;
+}
+/*
+^L
+*/
+/********************************************************/
 /*                                                      */
 /*	Procedure to "open" usager to module.           */
 /*      homework purpose                                */

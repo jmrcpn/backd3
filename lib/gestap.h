@@ -57,6 +57,9 @@ extern LSTTYP **tap_readtapefile(const char *filename);
 //liste of tape entries
 extern int tap_writetapefile(const char *filename,LSTTYP **list);
 
+//procedure to return a tape structure looking for a label
+extern const TAPTYP *tap_findtape(LSTTYP **list,const char *label);
+
 //homework done by module before starting to use it
 int tap_opengestap();
 

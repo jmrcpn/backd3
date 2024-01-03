@@ -98,14 +98,17 @@ while (proceed==true) {
 	phase=999;	//not going further
         }
       break;
-    case 4	:	//is the tape ID already existing?
-      break;
-    case 5	:	//everything right
+    case 4	:	//everything right
       int i;
       ETATYP togo;
 
       status=0;
       for (i=0;(i<params->argc)&&(status==0);i++) {
+        if (tap_findtape(list,params->argv[i])!=(TAPTYP *)0) {
+          (void) fprintf(stdout,"Tapeid <%s> already within tapelist\n",
+                                 params->argv[i]);
+          continue;
+          }
         (void) strncpy(tape->id[0],params->argv[i],sizeof(tape->id[0])-1);
         (void) fprintf(stdout,"Tapeid <%s> to be written on tape\n",tape->id[0]);
 	togo=tap_initheader(tape);
