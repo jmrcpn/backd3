@@ -100,6 +100,9 @@ int c;
 params=initparams();
 while (((c=getopt(argc,argv,optstring))!=EOF)&&(params!=(ARGTYP *)0)) {
   switch(c) {
+    case 'b'	:
+      params->blksize=atoll(optarg);
+      break;
     case 'd'	:
       debug=atoi(optarg);
       (void) rou_alert(1,"debug level is now '%d'",debug);
@@ -189,6 +192,7 @@ status=0;
 switch (called) {
   case wha_marker	:
     (void) fprintf(stderr,"%s\t"
+		          "[-b blocksize] "
 		          "[-d debug] "
 		          "[-h] "
 		          "[-r root] "
@@ -207,6 +211,7 @@ switch (called) {
 //common parameters list
 if (status==0) {
   (void) fprintf(stderr,"\twhere:\n");
+  (void) fprintf(stderr,"\t\t-b blks : tape block size\n");
   (void) fprintf(stderr,"\t\t-d level: debug level [1-10]\n");
   (void) fprintf(stderr,"\t\t-h\t: print this help message\n");
   (void) fprintf(stderr,"\t\t-r root\t: root working directory\n");
