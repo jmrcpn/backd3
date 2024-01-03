@@ -86,8 +86,6 @@ TAPTYP *tap_freetape(TAPTYP *data)
 
 {
 if (data!=(TAPTYP *)0) {
-  if (data->device!=(char *)0)
-    (void) free(data->device);
   (void) free(data);
   }
 data=(TAPTYP *)0;

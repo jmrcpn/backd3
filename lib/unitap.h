@@ -11,18 +11,19 @@
 #include        <time.h>
 #include        <uuid/uuid.h>
 
-#define LABSIZE 30              //label maximun size
+#define LABESIZ 30              //label maximun size
+#define POOLSIZ 15              //pool name maximun size
 
 //Tape header structure
 typedef struct  {
-        char    id[3][LABSIZE]; //tape ID (current, previous, next)
-        char    pool[LABSIZE];  //tape pool id
+        char    id[3][LABESIZ]; //tape ID (current, previous, next)
+        char    pool[POOLSIZ];  //tape pool id
         int     numrot;         //tape number of rotation (aging)
         time_t  stamp;          //backup stamp date
         time_t  tobkept;        //Backup retention date
         char    vers[10];       //backd version used to do backup
         char    uuid[40];       //tape marker uniqid
-        char    *device;        //device used by tape
+        char    device[60];     //device used by tape
         u_i64   blksize;        //tape blocksize (8 bytes)
         u_i64   lastblk;        //last position on the tape
         u_int   blocks;         //tape size in Mbytes

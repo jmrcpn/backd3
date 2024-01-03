@@ -162,7 +162,7 @@ if (tape!=(TAPTYP *)0) {
   char comment[50];
 
   toadd=(LSTTYP *)calloc(1,sizeof(LSTTYP));
-  (void) sprintf(comment,"# ADDED by JMPDBG");
+  (void) sprintf(comment,"ADDED by JMPDBG");
   toadd->comment=strdup(comment);
   toadd->tapedata=(TAPTYP *)calloc(1,sizeof(TAPTYP));
   (void) memcpy(toadd->tapedata,tape,sizeof(TAPTYP));
@@ -189,7 +189,7 @@ tape=(TAPTYP *)calloc(1,sizeof(TAPTYP));
 (void) strcpy(tape->id[2],"none");
 (void) uuid_unparse_upper(uuid,tape->uuid);
 if (params->device!=(char *)0)
-  tape->device=strdup(params->device);
+  (void) strncpy(tape->device,params->device,sizeof(tape->device));
 tape->blksize=params->blksize;
 return tape;
 }
