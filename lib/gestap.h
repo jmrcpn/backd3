@@ -38,8 +38,8 @@ extern int tap_locktapelist(const char *filename,int lock,int tentative);
 //procedure to add a tape entry within the tapeliste
 extern LSTTYP **tap_addtolist(LSTTYP **list,TAPTYP *tape);
 
-//init a tap structure
-extern TAPTYP *tap_newtap(char *label,uuid_t uuid,ARGTYP *params);
+//init a tape structure
+extern TAPTYP *tap_inittape(char *label,uuid_t uuid,ARGTYP *params);
 
 //procedure to write a new label on tape device
 extern ETATYP tap_initheader(TAPTYP *tape);

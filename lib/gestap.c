@@ -178,7 +178,7 @@ if (tape!=(TAPTYP *)0) {
   char comment[50];
 
   toadd=(LSTTYP *)calloc(1,sizeof(LSTTYP));
-  (void) sprintf(comment,"Stamped date=%s",rou_getstrfulldate(time((time_t *)0)));
+  (void) sprintf(comment,"Label Stamp: %s",rou_getstrfulldate(time((time_t *)0)));
   toadd->comment=strdup(comment);
   toadd->tapedata=(TAPTYP *)calloc(1,sizeof(TAPTYP));
   (void) memcpy(toadd->tapedata,tape,sizeof(TAPTYP));
@@ -194,19 +194,19 @@ return list;
 /*	procedure to initiat a clean tap structure.     */
 /*							*/
 /********************************************************/
-TAPTYP *tap_newtap(char *label,uuid_t uuid,ARGTYP *params)
+TAPTYP *tap_inittape(char *label,uuid_t uuid,ARGTYP *params)
 
 {
 TAPTYP *tape;
 
-tape=(TAPTYP *)calloc(1,sizeof(TAPTYP));
-(void) strncpy(tape->id[0],label,sizeof(tape->id[0])-1);
-(void) strcpy(tape->id[1],"none");
-(void) strcpy(tape->id[2],"none");
+tape=tap_newtape();
 (void) uuid_unparse_upper(uuid,tape->uuid);
 if (params->device!=(char *)0)
   (void) strncpy(tape->device,params->device,sizeof(tape->device));
-tape->blksize=params->blksize;
+if (params->pool!=(char *)0) 
+  (void) strncpy(tape->pool,params->pool,sizeof(tape->pool));
+if (params->blksize>0)
+  tape->blksize=params->blksize;
 return tape;
 }
 /*

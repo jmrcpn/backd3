@@ -26,6 +26,7 @@ typedef enum {			//application type
 //structure of argument
 typedef struct	{
 	char *device;		//The (tape) device 
+        char *pool;             //the tape used pool
         uuid_t uuid;            //session unique ID
         u_i64   blksize;        //tape blocksize (8 bytes)
 	int argc;		//number of main argument

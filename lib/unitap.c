@@ -96,6 +96,32 @@ return data;
 */
 /********************************************************/
 /*							*/
+/*	procedure to initialize a tape structure        */
+/*							*/
+/********************************************************/
+TAPTYP *tap_newtape()
+
+{
+#define BLOCKSIZE       64536   //default tape block size
+register const char *none="none";
+
+TAPTYP *tape;
+
+tape=(TAPTYP *)calloc(1,sizeof(TAPTYP));
+(void) strcpy(tape->id[0],none);
+(void) strcpy(tape->id[1],none); 
+(void) strcpy(tape->id[2],none);
+(void) strcpy(tape->pool,"POOL");
+(void) strcpy(tape->uuid,"0-0-0-0");
+tape->blksize=BLOCKSIZE;
+return tape;
+}
+
+/*
+^L
+*/
+/********************************************************/
+/*							*/
 /*      Convert a tape structure to a string (to be used*/
 /*      within tapeliste).                              */
 /*							*/
@@ -110,10 +136,10 @@ if (tape!=(TAPTYP *)0) {
   char data[300];
 
   (void) snprintf(data,sizeof(data)-5,"%-16s%-7s"
-                                      "% 5d% 12ld% 13d% 6d% 10d",
+                                      "% 6lld% 12ld% 13d% 6d% 10d",
                                       tape->id[0],
                                       tape->pool,
-                                      tape->blocks,
+                                      tape->blksize,
                                       tape->lastused,
                                       tape->frozen,
                                       tape->cycled,
@@ -138,7 +164,7 @@ TAPTYP *tape;
 
 tape=(TAPTYP *)0;
 if (data!=(const char *)0) {
-  u_long blocks;
+  u_i64 blksize;
   u_int lastused;
   u_int frozen;
   u_int cycled;
@@ -146,7 +172,7 @@ if (data!=(const char *)0) {
   char *id;
   char *pool;
 
-  blocks=0;
+  blksize=0;
   lastused=0;
   frozen=0;
   cycled=0;
@@ -155,12 +181,12 @@ if (data!=(const char *)0) {
   pool=(char *)0;
   if (sscanf(data,"%m[a-z,A-Z-,0-9]"    //tapeid
                   " %m[a-z,A-Z-,0-9]"   //poolid
-                  " %ld"                //blocksize
+                  " %lld"               //blocksize
                   " %u"                 //lastused
                   " %u"                 //frozen
                   " %u"                 //cycled
                   " %u"                 //pidlock
-                 ,&id,&pool,&blocks,      //minimal information
+                 ,&id,&pool,&blksize,  //minimal information
                  &lastused,&frozen,&cycled,&pidlock)>=3) {
     tape=(TAPTYP *)calloc(1,sizeof(TAPTYP));
     if (id!=(char *)0) {
@@ -171,7 +197,7 @@ if (data!=(const char *)0) {
       (void) strncpy(tape->pool,pool,sizeof(tape->pool)-1);
       (void) free(pool);
       }
-    tape->blocks=blocks;
+    tape->blksize=blksize;
     tape->lastused=lastused;
     tape->frozen=frozen;
     tape->cycled=cycled;

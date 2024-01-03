@@ -26,7 +26,6 @@ typedef struct  {
         char    device[60];     //device used by tape
         u_i64   blksize;        //tape blocksize (8 bytes)
         u_i64   lastblk;        //last position on the tape
-        u_int   blocks;         //tape size in Mbytes
         ulong   lastused;       //tape lastuse
         u_int   frozen;         //how long the tape must kept
         u_int   cycled;         //number of time tape was cycled
@@ -35,6 +34,9 @@ typedef struct  {
 
 //free memory used by a tap structure
 extern TAPTYP *tap_freetape(TAPTYP *data);
+
+//prepare a tape structure
+extern TAPTYP *tap_newtape();
 
 //convert a tap structure to a string
 extern char *tap_tapetostr(TAPTYP *tape);

@@ -85,7 +85,7 @@ while (proceed==true) {
         }
       break;
     case 2	:	//Preparing tape structure
-      if ((tape=tap_newtap("none",uuid,params))==(TAPTYP *)0) {
+      if ((tape=tap_inittape("none",uuid,params))==(TAPTYP *)0) {
 	(void) rou_alert(0,"%s Unable to assign tape structure (system Bug?)",
                             OPEP);
 	phase=999;	//not going further

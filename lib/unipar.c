@@ -13,8 +13,6 @@
 #include	"subrou.h"
 #include	"unipar.h"
 
-#define BLOCKSIZE       64536   //default tape block size
-
 typedef struct {
 	const char *id;		//application name
 	WHATTYPE what;		//what
@@ -45,8 +43,9 @@ ARGTYP *params;
 
 params=(ARGTYP *)calloc(1,sizeof(ARGTYP));
 params->argv=(char **)0;
-params->device=strdup("");
-params->blksize=BLOCKSIZE;
+params->device=(char *)0;
+params->pool=(char *)0;
+params->blksize=0;
 return params;
 }
 /*
@@ -72,6 +71,8 @@ if (params!=(ARGTYP *)0) {
       }
     (void) free(params->argv);
     }  
+  if (params->pool!=(char *)0)
+    (void) free(params->pool);
   if (params->device!=(char *)0)
     (void) free(params->device);
   (void) free(params);

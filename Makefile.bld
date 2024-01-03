@@ -30,11 +30,11 @@ PARTEST	=							\
 	   -d 0							\
 	   -r $(TESTDIR)					\
 	   TST-271828						\
+	   TST-355113						\
 	   -u /dev/tap1						\
 
 TSTPOOL	=							\
 	   TST-271828						\
-	   TST-355113						\
 	   TST-314159
 
 #to test tape marker
@@ -83,7 +83,7 @@ dotest	:
 #destrpying the testarea
 notest	:
 	   @ rm -fr $(TESTDIR)
-	   @ rm dotest
+	   @ rm -f dotest
 
 pool	:  debug
 	   @ mkdir -p $@/var/run/backd
