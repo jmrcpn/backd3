@@ -78,8 +78,8 @@ dotest	:
 	   @ cp $(TESTDIR)/dev/tap1 $(TESTDIR)/dev/tap2
 	   @ mkdir -p $(TESTDIR)/{etc/sysconfig,/etc/backd}
 	   @ cp -a						\
-		conf/tapelist.test				\
-		$(TESTDIR)/etc/backd/tapelist
+		conf-test/tapelist				\
+		$(TESTDIR)/etc/backd/
 	   @ touch $@
 
 #destrpying the testarea
